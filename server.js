@@ -18,15 +18,15 @@ app.post("/", async(req, res) => {
         mail: email
     }
     await Userdetails.insertMany([data])
-    // try {
-    //     const newUser = new Userdetails({ username, email });
-    //     await newUser.save()
-    //     res.json(await Userdetails.find())
-    //     await Userdetails.insertMany([newUser])
+    try {
+        const newUser = new Userdetails({ username, email });
+       await newUser.save()
+        res.json(await Userdetails.find())
         
-    // } catch (error) {
-    //      console.log(err)
-    // }
+        
+ } catch (error) {
+      console.log(err)
+    }
     
 })
 
