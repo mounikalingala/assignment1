@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+//import Axios from "axios";
 import img1 from "./assets/images/img1.png";
 import img2 from "./assets/images/img2.png";
 import { BsTelephoneFill, BsInstagram } from 'react-icons/bs';
@@ -15,25 +16,29 @@ const App=() =>{
   })
 
   const changeHandler = event => {
-        setData({...data,[event.target.name]:event.target.value})
+    
+    setData({ ...data, [event.target.name]: event.target.value })
     }
 
   const onSubmitForm = async(e) => {
     e.preventDefault()
     console.log(data)
-    // Axios.post("http://localhost:3003/", { data }).then(
-    //   (res) => console.log(res.data)
+    // Axios.post("http://localhost:3003/adduser", { userName:data.username,userEmail:data.email }).then(
+    //    (res) => console.log(res.data)
     // );
-   fetch("http://localhost:3003/", {
-      method: "POST",
-      headers: { "content.type": "application/json" },
-      body:JSON.stringify(data)
-   }).then((res) => {
-     console.log(res)
-     return res.json()
-   })
-    
-  setData({username:"",email:""})
+    fetch("http://localhost:3003/adduser", {
+       method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "content.type": "application/json",
+        "Accept":"application/json"  },
+    }).then(res => {
+      res.json()
+      console.log(res)
+    })
+    .then(data=>console.log(data))
+    .catch(err=>console.log(err))
+    setData({username:"",email:""})
   }
 
   return (
@@ -61,7 +66,7 @@ const App=() =>{
           <h1 className='text-4xl font-bold leading-relaxed mt-2'>Vehicle Maintanance <br /> From The Comfort of <br />Your Home</h1>
           <p className='text-gray-400 mt-2'>Open Auto Soothes the hassle of maintaining <br/> your vehicle and helps you deal with <br/> unexpected repairs worry-free.</p>
           </div>
-        <form action="post" className='flex flex-col mt-8' onSubmit={onSubmitForm}>
+        <form method="post" className='flex flex-col mt-8' onSubmit={onSubmitForm}>
           <div>
                 <input type="text" name="username" value={data.username} onChange={changeHandler} className='outline-none bg-transparent border rounded-full p-4 pl-8 w-[320px]' placeholder='Enter Your Name' />
           </div>
