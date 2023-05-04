@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 //import Axios from "axios";
 import img1 from "./assets/images/img1.png";
 import img2 from "./assets/images/img2.png";
@@ -15,14 +15,28 @@ const App=() =>{
     email:"",
   })
 
+  const [formErrors,setFormErrors]=useState({})
+const [isSubmit,setIsSubmit]=useState(false)
+
+  
   const changeHandler = event => {
     
     setData({ ...data, [event.target.name]: event.target.value })
+  }
+  
+  useEffect(() => {
+    console.log(formErrors)
+    if (Object.keys(formErrors).length === 0 && isSubmit) {
+      console.log(data)
     }
+  },[data])
 
   const onSubmitForm = async(e) => {
     e.preventDefault()
     console.log(data)
+setIsSubmit(true)
+    setFormErrors(validate(data))
+    setData()
     // Axios.post("http://localhost:3003/adduser", { userName:data.username,userEmail:data.email }).then(
     //    (res) => console.log(res.data)
     // );
@@ -39,6 +53,17 @@ const App=() =>{
     .then(data=>console.log(data))
     .catch(err=>console.log(err))
     setData({username:"",email:""})
+  }
+
+  const validate = (values) => {
+    const errors = {}
+    if (!values.username) {
+      errors.username="*Username is Required"
+    }
+    if (!values.email) {
+      errors.email="*Email is Required"
+    }
+    return errors
   }
 
   return (
@@ -69,10 +94,12 @@ const App=() =>{
         <form method="post" className='flex flex-col mt-8' onSubmit={onSubmitForm}>
           <div>
                 <input type="text" name="username" value={data.username} onChange={changeHandler} className='outline-none bg-transparent border rounded-full p-4 pl-8 w-[320px]' placeholder='Enter Your Name' />
-          </div>
+                <p className="text-red-500 text-sm mt-1 ml-4">{formErrors.username}</p>
+              </div>
           <div className='mt-4 mb-4'>
           <input type="text" name="email" value={data.email} onChange={changeHandler} className='outline-none bg-transparent border rounded-full p-4 pl-8 w-[320px]' placeholder='Enter Your Email' />
-          </div>
+          <p className="text-red-500 text-sm mt-1 ml-4">{formErrors.email}</p>
+              </div>
           <div>
           <input type="submit" value="Submit" className='cursor-pointer outline-none text-center bg-transparent border font-bold rounded-full p-4 pl-8 w-[320px] hover:bg-purple-700 hover:border-0' placeholder='Enter Your Name' />
           </div>
