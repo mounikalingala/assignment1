@@ -21,7 +21,6 @@ app.post("/adduser", async(req, res) => {
         console.log(error.message)
     }
     
-    
 })
 
 app.listen(3003, (req, res) => {
